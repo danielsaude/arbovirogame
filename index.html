@@ -93,7 +93,71 @@ Vigilância em Saúde – Educação e Prevenção
 function showGame(game) {
     document.getElementById("menu").classList.add("hidden");
     document.getElementById("gameArea").classList.remove("hidden");
-    document.getElementById("gameContent").innerHTML = "<h2>Carregando...</h2>";
+
+    if (game === "quiz") {
+        startQuiz();
+    } else {
+        document.getElementById("gameContent").innerHTML = "<h2>Em desenvolvimento...</h2>";
+    }
+}
+
+let quizIndex = 0;
+let score = 0;
+
+const questions = [
+    {
+        question: "Onde o mosquito da dengue se reproduz?",
+        options: ["Água parada", "Areia seca", "Água corrente", "Pedra"],
+        answer: 0
+    },
+    {
+        question: "Qual destes é sintoma da dengue?",
+        options: ["Febre alta", "Coceira leve", "Sono excessivo", "Dor de dente"],
+        answer: 0
+    },
+    {
+        question: "Como prevenir a dengue?",
+        options: ["Eliminar água parada", "Guardar lixo aberto", "Acumular garrafas", "Não limpar quintal"],
+        answer: 0
+    }
+];
+
+function startQuiz() {
+    quizIndex = 0;
+    score = 0;
+    showQuestion();
+}
+
+function showQuestion() {
+    if (quizIndex >= questions.length) {
+        document.getElementById("gameContent").innerHTML =
+            "<h2>🎉 Quiz Finalizado!</h2>" +
+            "<p>Sua pontuação: " + score + " / " + questions.length + "</p>" +
+            "<button onclick='startQuiz()'>🔄 Jogar Novamente</button>";
+        return;
+    }
+
+    let q = questions[quizIndex];
+
+    let html = "<h2>🎯 Quiz Arboviroses</h2>";
+    html += "<p>" + q.question + "</p>";
+
+    q.options.forEach((option, index) => {
+        html += "<button onclick='checkAnswer(" + index + ")'>" + option + "</button><br>";
+    });
+
+    document.getElementById("gameContent").innerHTML = html;
+}
+
+function checkAnswer(selected) {
+    if (selected === questions[quizIndex].answer) {
+        score++;
+        alert("✅ Resposta correta!");
+    } else {
+        alert("❌ Resposta incorreta!");
+    }
+    quizIndex++;
+    showQuestion();
 }
 
 function backMenu() {
