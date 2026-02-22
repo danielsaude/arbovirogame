@@ -226,6 +226,54 @@ function backMenu() {
     document.getElementById("gameArea").classList.add("hidden");
 }
 </script>
+<script>
 
+function abrirQuiz() {
+    document.getElementById("conteudo").innerHTML = `
+        <h2>🎯 Quiz da Dengue</h2>
+        <p>Qual é o principal transmissor da Dengue?</p>
+        <button onclick="respostaCerta()">Aedes aegypti</button>
+        <button onclick="respostaErrada()">Mosquito comum</button>
+        <button onclick="respostaErrada()">Pernilongo</button>
+    `;
+}
+
+function respostaCerta() {
+    alert("✅ Correto! O Aedes aegypti transmite Dengue, Zika e Chikungunya.");
+}
+
+function respostaErrada() {
+    alert("❌ Resposta incorreta. Tente novamente!");
+}
+
+function abrirJogoVelha() {
+    document.getElementById("conteudo").innerHTML = `
+        <h2>❌ Jogo da Prevenção</h2>
+        <p>Em breve você poderá jogar contra o mosquito!</p>
+    `;
+}
+
+function abrirLabirinto() {
+    document.getElementById("conteudo").innerHTML = `
+        <h2>🧭 Labirinto da Saúde</h2>
+        <p>Ajude o agente de saúde a eliminar os focos!</p>
+    `;
+}
+
+function abrirCacaPalavras() {
+    document.getElementById("conteudo").innerHTML = `
+        <h2>🔎 Caça-Palavras</h2>
+        <p>Encontre palavras como: PREVENÇÃO, MOSQUITO, ÁGUA PARADA</p>
+    `;
+}
+
+function abrirMemoria() {
+    document.getElementById("conteudo").innerHTML = `
+        <h2>🧠 Jogo da Memória</h2>
+        <p>Combine sintomas e doenças corretamente!</p>
+    `;
+}
+
+</script>
 </body>
 </html>
