@@ -61,7 +61,54 @@ footer {
     font-size: 14px;
     opacity: 0.8;
 }
-</style>
+.quiz-container {
+    max-width: 600px;
+    margin: auto;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.progress-bar {
+    width: 100%;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.progress {
+    height: 15px;
+    background: #ffd700;
+    border-radius: 10px;
+    width: 0%;
+    transition: 0.4s;
+}
+
+.option-btn {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.correct {
+    background-color: #4CAF50 !important;
+    color: white;
+}
+
+.wrong {
+    background-color: #e74c3c !important;
+    color: white;
+}
+
+.feedback {
+    margin-top: 10px;
+    font-weight: bold;
+}</style>
 </head>
 
 <body>
