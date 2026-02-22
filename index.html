@@ -144,100 +144,80 @@ Vigilância em Saúde – Educação e Prevenção
 </footer>
 
 <script>
-function showGame(game) {
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("gameArea").classList.remove("hidden");
-
-    if (game === "quiz") {
-        startQuiz();
-    } else {
-        document.getElementById("gameContent").innerHTML = "<h2>Em desenvolvimento...</h2>";
-    }
+<script>
+let perguntas = [
+{
+    pergunta: "Qual mosquito transmite Dengue, Zika e Chikungunya?",
+    opcoes: ["Aedes aegypti", "Pernilongo comum", "Mosquito da malária"],
+    correta: 0
+},
+{
+    pergunta: "Qual é a melhor forma de prevenir arboviroses?",
+    opcoes: ["Eliminar água parada", "Tomar antibiótico", "Beber mais água"],
+    correta: 0
+},
+{
+    pergunta: "A dengue pode causar:",
+    opcoes: ["Febre alta e dor no corpo", "Fratura óssea", "Cegueira imediata"],
+    correta: 0
+},
+{
+    pergunta: "Agentes de Endemias atuam:",
+    opcoes: ["Na prevenção e orientação", "Apenas em hospitais", "Somente em laboratório"],
+    correta: 0
 }
-
-let quizIndex = 0;
-let score = 0;
-
-const questions = [
-    {
-        question: "Onde o mosquito da dengue se reproduz?",
-        options: ["Água parada", "Areia seca", "Água corrente", "Pedra"],
-        answer: 0
-    },
-    {
-        question: "Qual destes é sintoma da dengue?",
-        options: ["Febre alta", "Coceira leve", "Sono excessivo", "Dor de dente"],
-        answer: 0
-    },
-    {
-        question: "Como prevenir a dengue?",
-        options: ["Eliminar água parada", "Guardar lixo aberto", "Acumular garrafas", "Não limpar quintal"],
-        answer: 0
-    }
 ];
 
-function startQuiz() {
-    quizIndex = 0;
-    score = 0;
-    showQuestion();
+let perguntaAtual = 0;
+let pontuacao = 0;
+
+function abrirQuiz() {
+    perguntaAtual = 0;
+    pontuacao = 0;
+    mostrarPergunta();
 }
 
-function showQuestion() {
-    if (quizIndex >= questions.length) {
-        document.getElementById("gameContent").innerHTML =
-            "<h2>🎉 Quiz Finalizado!</h2>" +
-            "<p>Sua pontuação: " + score + " / " + questions.length + "</p>" +
-            "<button onclick='startQuiz()'>🔄 Jogar Novamente</button>";
-        return;
-    }
+function mostrarPergunta() {
+    let p = perguntas[perguntaAtual];
 
-    let q = questions[quizIndex];
+    let html = `<h2>🎯 Quiz da Dengue</h2>`;
+    html += `<p>${p.pergunta}</p>`;
 
-    let html = "<h2>🎯 Quiz Arboviroses</h2>";
-    html += "<p>" + q.question + "</p>";
-
-    q.options.forEach((option, index) => {
-        html += "<button onclick='checkAnswer(" + index + ")'>" + option + "</button><br>";
+    p.opcoes.forEach((opcao, index) => {
+        html += `<button onclick="verificarResposta(${index})">${opcao}</button><br><br>`;
     });
 
-    document.getElementById("gameContent").innerHTML = html;
+    document.getElementById("conteudo").innerHTML = html;
 }
 
-function checkAnswer(selected) {
-    if (selected === questions[quizIndex].answer) {
-        score++;
+function verificarResposta(indice) {
+    if (indice === perguntas[perguntaAtual].correta) {
+        pontuacao++;
         alert("✅ Resposta correta!");
     } else {
         alert("❌ Resposta incorreta!");
     }
-    quizIndex++;
-    showQuestion();
+
+    perguntaAtual++;
+
+    if (perguntaAtual < perguntas.length) {
+        mostrarPergunta();
+    } else {
+        mostrarResultado();
+    }
 }
 
-function backMenu() {
-    document.getElementById("menu").classList.remove("hidden");
-    document.getElementById("gameArea").classList.add("hidden");
+function mostrarResultado() {
+    let html = `<h2>🏆 Resultado Final</h2>`;
+    html += `<p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>`;
+    html += `<button onclick="abrirQuiz()">🔄 Jogar Novamente</button>`;
+
+    document.getElementById("conteudo").innerHTML = html;
 }
 </script>
-<script>
 
-function abrirQuiz() {
-    document.getElementById("conteudo").innerHTML = `
-        <h2>🎯 Quiz da Dengue</h2>
-        <p>Qual é o principal transmissor da Dengue?</p>
-        <button onclick="respostaCerta()">Aedes aegypti</button>
-        <button onclick="respostaErrada()">Mosquito comum</button>
-        <button onclick="respostaErrada()">Pernilongo</button>
-    `;
-}
 
-function respostaCerta() {
-    alert("✅ Correto! O Aedes aegypti transmite Dengue, Zika e Chikungunya.");
-}
-
-function respostaErrada() {
-    alert("❌ Resposta incorreta. Tente novamente!");
-}
+    
 
 function abrirJogoVelha() {
     document.getElementById("conteudo").innerHTML = `
