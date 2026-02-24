@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<body>
-
-
-
-</div>
-
-<div id="conteudo"></div>    
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ArboviroGame</title>
@@ -21,22 +14,11 @@ body {
     color: white;
 }
 
-header {
-    padding: 20px;
-}
+header { padding: 20px; }
 
-h1 {
-    margin-bottom: 5px;
-}
+.subtitle { font-size: 16px; opacity: 0.9; }
 
-.subtitle {
-    font-size: 16px;
-    opacity: 0.9;
-}
-
-.menu {
-    margin-top: 30px;
-}
+.menu { margin-top: 30px; }
 
 button {
     padding: 15px 25px;
@@ -51,23 +33,14 @@ button {
     transition: 0.3s;
 }
 
-button:hover {
-    background-color: #ffd700;
-}
+button:hover { background-color: #ffd700; }
 
-.hidden {
-    display: none;
-}
+.hidden { display: none; }
 
-.game-area {
-    margin-top: 30px;
-}
+.game-area { margin-top: 30px; }
 
-footer {
-    margin-top: 40px;
-    font-size: 14px;
-    opacity: 0.8;
-}
+footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
+
 .quiz-container {
     max-width: 600px;
     margin: auto;
@@ -75,47 +48,7 @@ footer {
     padding: 20px;
     border-radius: 15px;
 }
-
-.progress-bar {
-    width: 100%;
-    background: #ddd;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
-
-.progress {
-    height: 15px;
-    background: #ffd700;
-    border-radius: 10px;
-    width: 0%;
-    transition: 0.4s;
-}
-
-.option-btn {
-    display: block;
-    width: 100%;
-    margin: 8px 0;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.correct {
-    background-color: #4CAF50 !important;
-    color: white;
-}
-
-.wrong {
-    background-color: #e74c3c !important;
-    color: white;
-}
-
-.feedback {
-    margin-top: 10px;
-    font-weight: bold;
-}</style>
+</style>
 </head>
 
 <body>
@@ -127,15 +60,14 @@ footer {
 </header>
 
 <div class="menu" id="menu">
-    <button onclick="showGame('quiz')">🎯 Quiz</button>
-    <button onclick="showGame('velha')">❌⭕ Jogo da Velha</button>
-    <button onclick="showGame('caca')">🔎 Caça-Palavras</button>
-    <button onclick="showGame('labirinto')">🌀 Labirinto</button>
-    <button onclick="showGame('foco')">🧹 Elimine o Foco</button>
+    <button onclick="iniciarQuiz()">🎯 Quiz da Dengue</button>
+    <button onclick="mostrarMensagem('Jogo da Prevenção em desenvolvimento')">❌⭕ Jogo da Prevenção</button>
+    <button onclick="mostrarMensagem('Caça-Palavras em desenvolvimento')">🔎 Caça-Palavras</button>
+    <button onclick="mostrarMensagem('Labirinto da Saúde em desenvolvimento')">🌀 Labirinto</button>
 </div>
 
 <div class="game-area hidden" id="gameArea">
-    <button onclick="backMenu()">⬅ Voltar ao Menu</button>
+    <button onclick="voltarMenu()">⬅ Voltar ao Menu</button>
     <div id="gameContent"></div>
 </div>
 
@@ -144,6 +76,7 @@ Vigilância em Saúde – Educação e Prevenção
 </footer>
 
 <script>
+
 let perguntas = [
 {
     pergunta: "Qual mosquito transmite Dengue, Zika e Chikungunya?",
@@ -170,7 +103,9 @@ let perguntas = [
 let perguntaAtual = 0;
 let pontuacao = 0;
 
-function abrirQuiz() {
+function iniciarQuiz() {
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("gameArea").classList.remove("hidden");
     perguntaAtual = 0;
     pontuacao = 0;
     mostrarPergunta();
@@ -179,22 +114,23 @@ function abrirQuiz() {
 function mostrarPergunta() {
     let p = perguntas[perguntaAtual];
 
-    let html = `<h2>🎯 Quiz da Dengue</h2>`;
-    html += `<p>${p.pergunta}</p>`;
+    let html = `<div class="quiz-container">`;
+    html += `<h2>🎯 Quiz da Dengue</h2>`;
+    html += `<p><strong>${p.pergunta}</strong></p>`;
 
     p.opcoes.forEach((opcao, index) => {
-        html += `<button onclick="verificarResposta(${index})">${opcao}</button><br><br>`;
+        html += `<button onclick="verificarResposta(${index})">${opcao}</button><br>`;
     });
 
-    document.getElementById("conteudo").innerHTML = html;
+    html += `</div>`;
+
+    document.getElementById("gameContent").innerHTML = html;
 }
 
 function verificarResposta(indice) {
+
     if (indice === perguntas[perguntaAtual].correta) {
         pontuacao++;
-        alert("✅ Resposta correta!");
-    } else {
-        alert("❌ Resposta incorreta!");
     }
 
     perguntaAtual++;
@@ -207,45 +143,27 @@ function verificarResposta(indice) {
 }
 
 function mostrarResultado() {
-    let html = `<h2>🏆 Resultado Final</h2>`;
+    let html = `<div class="quiz-container">`;
+    html += `<h2>🏆 Resultado Final</h2>`;
     html += `<p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>`;
-    html += `<button onclick="abrirQuiz()">🔄 Jogar Novamente</button>`;
+    html += `<button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>`;
+    html += `</div>`;
 
-    document.getElementById("conteudo").innerHTML = html;
-}
-</script>
-
-
-    
-
-function abrirJogoVelha() {
-    document.getElementById("conteudo").innerHTML = `
-        <h2>❌ Jogo da Prevenção</h2>
-        <p>Em breve você poderá jogar contra o mosquito!</p>
-    `;
+    document.getElementById("gameContent").innerHTML = html;
 }
 
-function abrirLabirinto() {
-    document.getElementById("conteudo").innerHTML = `
-        <h2>🧭 Labirinto da Saúde</h2>
-        <p>Ajude o agente de saúde a eliminar os focos!</p>
-    `;
+function voltarMenu() {
+    document.getElementById("menu").classList.remove("hidden");
+    document.getElementById("gameArea").classList.add("hidden");
 }
 
-function abrirCacaPalavras() {
-    document.getElementById("conteudo").innerHTML = `
-        <h2>🔎 Caça-Palavras</h2>
-        <p>Encontre palavras como: PREVENÇÃO, MOSQUITO, ÁGUA PARADA</p>
-    `;
-}
-
-function abrirMemoria() {
-    document.getElementById("conteudo").innerHTML = `
-        <h2>🧠 Jogo da Memória</h2>
-        <p>Combine sintomas e doenças corretamente!</p>
-    `;
+function mostrarMensagem(msg) {
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("gameArea").classList.remove("hidden");
+    document.getElementById("gameContent").innerHTML = `<h2>${msg}</h2>`;
 }
 
 </script>
+
 </body>
 </html>
