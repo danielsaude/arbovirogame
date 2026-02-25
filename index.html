@@ -6,47 +6,47 @@
 <title>ArboviroGame</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
-    background: linear-gradient(135deg, #0f9b8e, #1f3c88);
-    color: white;
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+text-align:center;
+background:linear-gradient(135deg,#0f9b8e,#1f3c88);
+color:white;
 }
 
-header { padding: 20px; }
+header{padding:20px;}
 
-.subtitle { font-size: 16px; opacity: 0.9; }
+.subtitle{font-size:16px;opacity:.9;}
 
-.menu { margin-top: 30px; }
+.menu{margin-top:30px;}
 
-button {
-    padding: 15px 25px;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #ffffff;
-    color: #1f3c88;
-    font-weight: bold;
-    transition: 0.3s;
+button{
+padding:15px 25px;
+margin:10px;
+border:none;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+background:#ffffff;
+color:#1f3c88;
+font-weight:bold;
+transition:.3s;
 }
 
-button:hover { background-color: #ffd700; }
+button:hover{background:#ffd700;}
 
-.hidden { display: none; }
+.hidden{display:none;}
 
-.game-area { margin-top: 30px; }
+.game-area{margin-top:30px;}
 
-footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
+footer{margin-top:40px;font-size:14px;opacity:.8;}
 
-.quiz-container {
-    max-width: 600px;
-    margin: auto;
-    background: rgba(255,255,255,0.1);
-    padding: 20px;
-    border-radius: 15px;
+.quiz-container{
+max-width:600px;
+margin:auto;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:15px;
 }
 </style>
 </head>
@@ -62,8 +62,8 @@ footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
 <div class="menu" id="menu">
 <button onclick="iniciarQuiz()">🎯 Quiz da Dengue</button>
 <button onclick="mostrarMensagem('❌⭕ Jogo da Prevenção em desenvolvimento')">❌⭕ Jogo da Prevenção</button>
-<button onclick="mostrarMensagem('🔎 Caça-Palavras em desenvolvimento')">🔎 Caça-Palavras</button>
 <button onclick="mostrarMensagem('🌀 Labirinto da Saúde em desenvolvimento')">🌀 Labirinto da Saúde</button>
+<button onclick="mostrarMensagem('🔎 Caça-Palavras em desenvolvimento')">🔎 Caça-Palavras</button>
 <button onclick="mostrarMensagem('🧠 Jogo da Memória em desenvolvimento')">🧠 Jogo da Memória</button>
 </div>
 
@@ -78,102 +78,109 @@ Vigilância em Saúde – Educação e Prevenção
 
 <script>
 
-// ================= BANCO DE PERGUNTAS =================
+/* ============================= */
+/* BANCO DE PERGUNTAS */
+/* ============================= */
 
 let bancoPerguntas = [
 {
-pergunta: "Qual mosquito transmite Dengue, Zika e Chikungunya?",
-opcoes: ["Aedes aegypti", "Pernilongo comum", "Mosquito da malária"],
-correta: 0,
-explicacao: "O Aedes aegypti é o principal transmissor urbano dessas arboviroses."
+pergunta:"Qual mosquito transmite Dengue, Zika e Chikungunya?",
+opcoes:["Aedes aegypti","Pernilongo comum","Mosquito da malária"],
+correta:0,
+explicacao:"O Aedes aegypti é o principal transmissor urbano."
 },
 {
-pergunta: "Onde o mosquito deposita seus ovos?",
-opcoes: ["Água parada limpa", "Água corrente", "Solo seco"],
-correta: 0,
-explicacao: "Ele prefere água parada limpa."
+pergunta:"Onde o mosquito deposita seus ovos?",
+opcoes:["Água parada limpa","Água corrente","Solo seco"],
+correta:0,
+explicacao:"Ele prefere água parada limpa."
 },
 {
-pergunta: "Sintoma comum da dengue:",
-opcoes: ["Febre alta e dor no corpo", "Queda de cabelo", "Coceira nos pés"],
-correta: 0,
-explicacao: "Febre e dores são sintomas frequentes."
+pergunta:"Sintoma comum da dengue:",
+opcoes:["Febre alta e dor no corpo","Queda de cabelo","Coceira nos pés"],
+correta:0,
+explicacao:"Febre e dores intensas são sintomas frequentes."
 },
 {
-pergunta: "Eliminar água parada:",
-opcoes: ["Impede reprodução", "Mata vírus no ar", "Substitui vacina"],
-correta: 0,
-explicacao: "Sem água parada o mosquito não se reproduz."
+pergunta:"Eliminar água parada:",
+opcoes:["Impede reprodução","Mata vírus no ar","Substitui vacina"],
+correta:0,
+explicacao:"Sem água parada o mosquito não se reproduz."
 },
 {
-pergunta: "A prevenção depende:",
-opcoes: ["Da comunidade", "Só hospital", "Só vacina"],
-correta: 0,
-explicacao: "É responsabilidade coletiva."
+pergunta:"A prevenção depende:",
+opcoes:["Da comunidade","Só hospital","Só vacina"],
+correta:0,
+explicacao:"A prevenção é responsabilidade coletiva."
 }
 ];
 
-// ================= VARIÁVEIS =================
+/* ============================= */
+/* VARIÁVEIS */
+/* ============================= */
 
-let perguntas = [];
-let perguntaAtual = 0;
-let pontuacao = 0;
+let perguntas=[];
+let perguntaAtual=0;
+let pontuacao=0;
 
-// ================= SORTEAR =================
+/* ============================= */
+/* FUNÇÕES MENU */
+/* ============================= */
 
-function sortearPerguntas(qtd = 5){
-let copia = [...bancoPerguntas];
-copia.sort(()=>0.5-Math.random());
-perguntas = copia.slice(0,qtd);
+function voltarMenu(){
+document.getElementById("menu").classList.remove("hidden");
+document.getElementById("gameArea").classList.add("hidden");
+document.getElementById("gameContent").innerHTML="";
 }
 
-// ================= INICIAR =================
+function mostrarMensagem(msg){
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("gameArea").classList.remove("hidden");
+document.getElementById("gameContent").innerHTML="<h2>"+msg+"</h2>";
+}
+
+/* ============================= */
+/* QUIZ */
+/* ============================= */
+
+function sortearPerguntas(qtd=5){
+let copia=[...bancoPerguntas];
+copia.sort(()=>0.5-Math.random());
+perguntas=copia.slice(0,qtd);
+}
 
 function iniciarQuiz(){
 document.getElementById("menu").classList.add("hidden");
 document.getElementById("gameArea").classList.remove("hidden");
 
-sortearPerguntas(5);
+sortearPerguntas();
 
-perguntaAtual = 0;
-pontuacao = 0;
+perguntaAtual=0;
+pontuacao=0;
 mostrarPergunta();
 }
 
-// ================= MOSTRAR =================
-
 function mostrarPergunta(){
+let p=perguntas[perguntaAtual];
 
-let p = perguntas[perguntaAtual];
-let progresso = ((perguntaAtual)/perguntas.length)*100;
-
-let html = `
-<div class="quiz-container">
-<h2>🎯 Quiz Institucional</h2>
-
-<div style="background:#ddd;border-radius:10px;margin-bottom:15px;">
-<div style="height:15px;background:#ffd700;width:${progresso}%;border-radius:10px;"></div>
-</div>
-
-<p><strong>${p.pergunta}</strong></p>
-`;
+let html="<div class='quiz-container'>";
+html+="<h2>🎯 Quiz Institucional</h2>";
+html+="<p><strong>"+p.pergunta+"</strong></p>";
 
 p.opcoes.forEach((opcao,index)=>{
-html+=`<button onclick="verificarResposta(${index})">${opcao}</button><br>`;
+html+="<button onclick='verificarResposta("+index+")'>"+opcao+"</button><br>";
 });
 
-html+=`<div id="feedback" style="margin-top:15px;font-weight:bold;"></div>`;
-html+=`</div>`;
+html+="<div id='feedback' style='margin-top:15px;font-weight:bold;'></div>";
+html+="</div>";
 
-document.getElementById("gameContent").innerHTML = html;
+document.getElementById("gameContent").innerHTML=html;
 }
-
-// ================= VERIFICAR =================
 
 function verificarResposta(indice){
 
-let correta = perguntas[perguntaAtual].correta;
-let feedback = document.getElementById("feedback");
+let correta=perguntas[perguntaAtual].correta;
+let feedback=document.getElementById("feedback");
 
 if(indice===correta){
 pontuacao++;
@@ -192,46 +199,20 @@ mostrarResultado();
 },1500);
 }
 
-// ================= RESULTADO =================
-
 function mostrarResultado(){
+let percentual=Math.round((pontuacao/perguntas.length)*100);
 
-let percentual = Math.round((pontuacao/perguntas.length)*100);
+let html="<div class='quiz-container'>";
+html+="<h2>🏆 Resultado Final</h2>";
+html+="<p>Você acertou "+pontuacao+" de "+perguntas.length+" perguntas.</p>";
+html+="<p><strong>"+percentual+"% de aproveitamento</strong></p>";
+html+="<button onclick='iniciarQuiz()'>🔄 Jogar Novamente</button>";
+html+="</div>";
 
-let html = `
-<div class="quiz-container">
-<h2>🏆 Resultado Final</h2>
-<p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>
-<p><strong>${percentual}% de aproveitamento</strong></p>
-<button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>
-</div>
-`;
-
-document.getElementById("gameContent").innerHTML = html;
-}
-
-// ================= VOLTAR =================
-
-function voltarMenu(){
-document.getElementById("menu").classList.remove("hidden");
-document.getElementById("gameArea").classList.add("hidden");
-document.getElementById("gameContent").innerHTML="";
-}
-
-// ================= MENSAGEM =================
-
-function mostrarMensagem(msg){
-document.getElementById("menu").classList.add("hidden");
-document.getElementById("gameArea").classList.remove("hidden");
-document.getElementById("gameContent").innerHTML=`<h2>${msg}</h2>`;
+document.getElementById("gameContent").innerHTML=html;
 }
 
 </script>
 
 </body>
 </html>
-
-
-
-
-
