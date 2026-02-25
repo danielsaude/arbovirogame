@@ -69,135 +69,210 @@ button:hover { background-color: #ffd700; }
 <body>
 
 <header>
-    <h1>🦟 ArboviroGame</h1>
-    <div class="subtitle">Missão Contra as Arboviroses</div>
-    <div class="subtitle">Educação em Saúde – Prevenção que Protege</div>
+<h1>🦟 ArboviroGame</h1>
+<div class="subtitle">Missão Contra as Arboviroses</div>
+<div class="subtitle">Educação em Saúde – Prevenção que Protege</div>
 </header>
 
 <div class="menu" id="menu">
-    <button onclick="iniciarQuiz()">🎯 Quiz</button>
-    <button onclick="iniciarMemoria('classica')">🧠 Memória Clássica</button>
-    <button onclick="iniciarMemoria('educativa')">📘 Memória Educativa</button>
-    <button onclick="iniciarMemoria('ludica')">🎨 Memória Lúdica</button>
+<button onclick="iniciarQuiz()">🎯 Quiz</button>
+<button onclick="verRanking()">🏆 Ranking</button>
+<button onclick="iniciarMemoria('classica')">🧠 Memória Clássica</button>
+<button onclick="iniciarMemoria('educativa')">📘 Memória Educativa</button>
+<button onclick="iniciarMemoria('ludica')">🎨 Memória Lúdica</button>
 </div>
 
 <div class="game-area hidden" id="gameArea">
-    <button onclick="voltarMenu()">⬅ Voltar ao Menu</button>
-    <div id="gameContent"></div>
+<button onclick="voltarMenu()">⬅ Voltar ao Menu</button>
+<div id="gameContent"></div>
 </div>
 
 <script>
 
-// ================= QUIZ SIMPLES =================
+// ==========================
+// BANCO DE PERGUNTAS
+// ==========================
+
+let bancoPerguntas = [
+{ pergunta:"Qual mosquito transmite Dengue?", opcoes:["Aedes aegypti","Pernilongo"], correta:0 },
+{ pergunta:"Onde o mosquito se reproduz?", opcoes:["Água parada","Areia seca"], correta:0 },
+{ pergunta:"Sintoma comum da dengue?", opcoes:["Febre alta","Dor no dente"], correta:0 },
+{ pergunta:"Caixa d'água deve estar?", opcoes:["Tampada","Aberta"], correta:0 },
+{ pergunta:"Prevenção depende de?", opcoes:["Comunidade","Somente hospital"], correta:0 }
+];
+
+let perguntas = [];
+let perguntaAtual = 0;
+let pontuacao = 0;
+let nomeJogador = "";
+
+// ==========================
+// QUIZ
+// ==========================
 
 function iniciarQuiz() {
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("gameArea").classList.remove("hidden");
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("gameArea").classList.remove("hidden");
 
-    document.getElementById("gameContent").innerHTML = `
-        <div class="quiz-container">
-        <h2>Quiz</h2>
-        <p>Quiz funcionando normalmente (mantido separado).</p>
-        </div>
-    `;
+nomeJogador = prompt("Digite seu nome:");
+if(!nomeJogador) nomeJogador = "Visitante";
+
+perguntas = [...bancoPerguntas].sort(() => 0.5 - Math.random());
+perguntaAtual = 0;
+pontuacao = 0;
+
+mostrarPergunta();
 }
 
-// ================= JOGO DA MEMÓRIA =================
+function mostrarPergunta() {
+
+let p = perguntas[perguntaAtual];
+
+let html = `<div class="quiz-container">
+<h2>Quiz</h2>
+<p><strong>${p.pergunta}</strong></p>`;
+
+p.opcoes.forEach((opcao, i) => {
+html += `<button onclick="responder(${i})">${opcao}</button><br>`;
+});
+
+html += `</div>`;
+
+document.getElementById("gameContent").innerHTML = html;
+}
+
+function responder(i) {
+
+if(i === perguntas[perguntaAtual].correta) pontuacao++;
+
+perguntaAtual++;
+
+if(perguntaAtual < perguntas.length) {
+mostrarPergunta();
+} else {
+finalizarQuiz();
+}
+}
+
+function finalizarQuiz() {
+
+let ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+
+ranking.push({nome:nomeJogador, pontos:pontuacao});
+ranking.sort((a,b)=>b.pontos-a.pontos);
+
+localStorage.setItem("ranking", JSON.stringify(ranking));
+
+document.getElementById("gameContent").innerHTML = `
+<div class="quiz-container">
+<h2>Resultado</h2>
+<p>${nomeJogador}, você fez ${pontuacao} pontos.</p>
+<button onclick="verRanking()">Ver Ranking</button>
+</div>`;
+}
+
+// ==========================
+// RANKING
+// ==========================
+
+function verRanking(){
+
+let ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+
+let html = `<div class="quiz-container"><h2>Ranking</h2>`;
+
+ranking.forEach((j,i)=>{
+html += `<p>${i+1}º - ${j.nome} (${j.pontos} pts)</p>`;
+});
+
+html += `</div>`;
+
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("gameArea").classList.remove("hidden");
+document.getElementById("gameContent").innerHTML = html;
+}
+
+// ==========================
+// MEMÓRIA
+// ==========================
 
 let cartasViradas = [];
-let paresEncontrados = 0;
+let pares = 0;
+let cartas = [];
 
-function iniciarMemoria(tipo) {
+function iniciarMemoria(tipo){
 
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("gameArea").classList.remove("hidden");
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("gameArea").classList.remove("hidden");
 
-    paresEncontrados = 0;
-    cartasViradas = [];
+cartasViradas = [];
+pares = 0;
 
-    let pares = [];
+let base = [];
 
-    if (tipo === "classica") {
-        pares = [
-            ["Aedes", "Mosquito"],
-            ["Água parada", "Risco"],
-            ["Prevenção", "Proteção"],
-            ["Endemias", "Vigilância"]
-        ];
-    }
-
-    if (tipo === "educativa") {
-        pares = [
-            ["Dengue", "Febre e dor no corpo"],
-            ["Zika", "Pode afetar gestantes"],
-            ["Chikungunya", "Dor intensa nas articulações"],
-            ["Prevenção", "Eliminar água parada"]
-        ];
-    }
-
-    if (tipo === "ludica") {
-        pares = [
-            ["🦟", "Mosquito"],
-            ["💧", "Água parada"],
-            ["🏥", "Saúde"],
-            ["🧹", "Limpeza"]
-        ];
-    }
-
-    let cartas = [];
-    pares.forEach(par => {
-        cartas.push({valor: par[0], id: par[0]});
-        cartas.push({valor: par[1], id: par[0]});
-    });
-
-    cartas.sort(() => 0.5 - Math.random());
-
-    let html = `<div class="memory-grid">`;
-
-    cartas.forEach((carta, index) => {
-        html += `<div class="card" onclick="virarCarta(${index}, '${carta.id}', '${carta.valor}')">?</div>`;
-    });
-
-    html += `</div>`;
-
-    document.getElementById("gameContent").innerHTML = html;
-
-    window.cartas = cartas;
+if(tipo==="classica"){
+base=[["Aedes","Mosquito"],["Água","Risco"],["Prevenção","Proteção"],["Endemias","Vigilância"]];
+}
+if(tipo==="educativa"){
+base=[["Dengue","Febre"],["Zika","Gestantes"],["Chikungunya","Articulações"],["Prevenção","Eliminar água"]];
+}
+if(tipo==="ludica"){
+base=[["🦟","Mosquito"],["💧","Água"],["🏥","Saúde"],["🧹","Limpeza"]];
 }
 
-function virarCarta(index, id, valor) {
+cartas=[];
 
-    let card = document.getElementsByClassName("card")[index];
+base.forEach(p=>{
+cartas.push({id:p[0],valor:p[0]});
+cartas.push({id:p[0],valor:p[1]});
+});
 
-    if (card.innerHTML !== "?" || cartasViradas.length === 2) return;
+cartas.sort(()=>0.5-Math.random());
 
-    card.innerHTML = valor;
-    cartasViradas.push({index, id});
+let html=`<div class="memory-grid">`;
 
-    if (cartasViradas.length === 2) {
+cartas.forEach((c,i)=>{
+html+=`<div class="card" onclick="virar(${i})">?</div>`;
+});
 
-        if (cartasViradas[0].id === cartasViradas[1].id) {
-            paresEncontrados++;
-            cartasViradas = [];
+html+=`</div>`;
 
-            if (paresEncontrados === 4) {
-                setTimeout(() => {
-                    alert("Parabéns! Você concluiu o jogo.");
-                }, 300);
-            }
-        } else {
-            setTimeout(() => {
-                document.getElementsByClassName("card")[cartasViradas[0].index].innerHTML = "?";
-                document.getElementsByClassName("card")[cartasViradas[1].index].innerHTML = "?";
-                cartasViradas = [];
-            }, 800);
-        }
-    }
+document.getElementById("gameContent").innerHTML=html;
 }
 
-function voltarMenu() {
-    document.getElementById("menu").classList.remove("hidden");
-    document.getElementById("gameArea").classList.add("hidden");
+function virar(i){
+
+let elementos=document.getElementsByClassName("card");
+
+if(elementos[i].innerHTML!=="?"||cartasViradas.length===2)return;
+
+elementos[i].innerHTML=cartas[i].valor;
+cartasViradas.push(i);
+
+if(cartasViradas.length===2){
+
+let c1=cartas[cartasViradas[0]];
+let c2=cartas[cartasViradas[1]];
+
+if(c1.id===c2.id){
+pares++;
+cartasViradas=[];
+if(pares===4)setTimeout(()=>alert("Parabéns!"),300);
+}else{
+setTimeout(()=>{
+elementos[cartasViradas[0]].innerHTML="?";
+elementos[cartasViradas[1]].innerHTML="?";
+cartasViradas=[];
+},800);
+}
+}
+}
+
+// ==========================
+
+function voltarMenu(){
+document.getElementById("menu").classList.remove("hidden");
+document.getElementById("gameArea").classList.add("hidden");
 }
 
 </script>
