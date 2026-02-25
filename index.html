@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ArboviroGame</title>
+<title>ArboviroGame – Missão Contra as Arboviroses</title>
 
 <style>
 body{
@@ -21,8 +21,8 @@ header{padding:20px;}
 .menu{margin-top:30px;}
 
 button{
-padding:15px 25px;
-margin:10px;
+padding:12px 20px;
+margin:8px;
 border:none;
 border-radius:10px;
 font-size:16px;
@@ -42,11 +42,35 @@ button:hover{background:#ffd700;}
 footer{margin-top:40px;font-size:14px;opacity:.8;}
 
 .quiz-container{
-max-width:600px;
+max-width:650px;
 margin:auto;
 background:rgba(255,255,255,0.1);
-padding:20px;
+padding:25px;
 border-radius:15px;
+}
+
+.progress-bar{
+width:100%;
+background:#ddd;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.progress{
+height:15px;
+background:#ffd700;
+border-radius:10px;
+width:0%;
+transition:.4s;
+}
+
+.correct{background:#4CAF50!important;color:white;}
+.wrong{background:#e74c3c!important;color:white;}
+
+.resultado{
+font-size:18px;
+margin-top:10px;
+font-weight:bold;
 }
 </style>
 </head>
@@ -60,9 +84,9 @@ border-radius:15px;
 </header>
 
 <div class="menu" id="menu">
-<button onclick="iniciarQuiz()">🎯 Quiz da Dengue</button>
+<button onclick="iniciarQuiz()">🎯 Quiz Institucional</button>
 <button onclick="mostrarMensagem('❌⭕ Jogo da Prevenção em desenvolvimento')">❌⭕ Jogo da Prevenção</button>
-<button onclick="mostrarMensagem('🌀 Labirinto da Saúde em desenvolvimento')">🌀 Labirinto da Saúde</button>
+<button onclick="mostrarMensagem('🌀 Labirinto da Saúde em desenvolvimento')">🌀 Labirinto</button>
 <button onclick="mostrarMensagem('🔎 Caça-Palavras em desenvolvimento')">🔎 Caça-Palavras</button>
 <button onclick="mostrarMensagem('🧠 Jogo da Memória em desenvolvimento')">🧠 Jogo da Memória</button>
 </div>
@@ -78,54 +102,28 @@ Vigilância em Saúde – Educação e Prevenção
 
 <script>
 
-/* ============================= */
-/* BANCO DE PERGUNTAS */
-/* ============================= */
+/* ================= BANCO COMPLETO ================= */
 
-let bancoPerguntas = [
-{
-pergunta:"Qual mosquito transmite Dengue, Zika e Chikungunya?",
-opcoes:["Aedes aegypti","Pernilongo comum","Mosquito da malária"],
-correta:0,
-explicacao:"O Aedes aegypti é o principal transmissor urbano."
-},
-{
-pergunta:"Onde o mosquito deposita seus ovos?",
-opcoes:["Água parada limpa","Água corrente","Solo seco"],
-correta:0,
-explicacao:"Ele prefere água parada limpa."
-},
-{
-pergunta:"Sintoma comum da dengue:",
-opcoes:["Febre alta e dor no corpo","Queda de cabelo","Coceira nos pés"],
-correta:0,
-explicacao:"Febre e dores intensas são sintomas frequentes."
-},
-{
-pergunta:"Eliminar água parada:",
-opcoes:["Impede reprodução","Mata vírus no ar","Substitui vacina"],
-correta:0,
-explicacao:"Sem água parada o mosquito não se reproduz."
-},
-{
-pergunta:"A prevenção depende:",
-opcoes:["Da comunidade","Só hospital","Só vacina"],
-correta:0,
-explicacao:"A prevenção é responsabilidade coletiva."
-}
+let bancoPerguntas=[
+{pergunta:"Qual mosquito transmite Dengue, Zika e Chikungunya?",opcoes:["Aedes aegypti","Pernilongo comum","Mosquito da malária"],correta:0,exp:"É o principal vetor urbano."},
+{pergunta:"O mosquito deposita ovos em:",opcoes:["Água parada","Água corrente","Solo seco"],correta:0,exp:"Prefere água parada limpa."},
+{pergunta:"Sintoma comum da dengue:",opcoes:["Febre alta","Unha quebradiça","Coceira leve"],correta:0,exp:"Febre alta e dor no corpo são comuns."},
+{pergunta:"Eliminar água parada:",opcoes:["Impede reprodução","Substitui vacina","Mata vírus no ar"],correta:0,exp:"Sem água parada não há ciclo reprodutivo."},
+{pergunta:"Caixa d'água deve estar:",opcoes:["Bem tampada","Destampada","Com furos"],correta:0,exp:"A tampa impede postura de ovos."},
+{pergunta:"O Aedes pica mais:",opcoes:["Durante o dia","Só à noite","No inverno"],correta:0,exp:"É mais ativo durante o dia."},
+{pergunta:"Pratos de plantas devem ter:",opcoes:["Areia até borda","Água acumulada","Nada"],correta:0,exp:"Areia evita água parada."},
+{pergunta:"Garrafas devem ficar:",opcoes:["Viradas para baixo","Cheias de água","Destampadas"],correta:0,exp:"Evita acúmulo de água."},
+{pergunta:"Prevenção depende:",opcoes:["Da comunidade","Só hospital","Só vacina"],correta:0,exp:"É responsabilidade coletiva."},
+{pergunta:"Agentes de Endemias atuam:",opcoes:["Na prevenção","Só hospital","Só laboratório"],correta:0,exp:"Trabalho educativo e domiciliar."}
 ];
 
-/* ============================= */
-/* VARIÁVEIS */
-/* ============================= */
+/* ================= VARIÁVEIS ================= */
 
 let perguntas=[];
 let perguntaAtual=0;
 let pontuacao=0;
 
-/* ============================= */
-/* FUNÇÕES MENU */
-/* ============================= */
+/* ================= MENU ================= */
 
 function voltarMenu(){
 document.getElementById("menu").classList.remove("hidden");
@@ -139,54 +137,57 @@ document.getElementById("gameArea").classList.remove("hidden");
 document.getElementById("gameContent").innerHTML="<h2>"+msg+"</h2>";
 }
 
-/* ============================= */
-/* QUIZ */
-/* ============================= */
+/* ================= QUIZ ================= */
 
-function sortearPerguntas(qtd=5){
+function sortear(){
 let copia=[...bancoPerguntas];
 copia.sort(()=>0.5-Math.random());
-perguntas=copia.slice(0,qtd);
+perguntas=copia.slice(0,10);
 }
 
 function iniciarQuiz(){
 document.getElementById("menu").classList.add("hidden");
 document.getElementById("gameArea").classList.remove("hidden");
 
-sortearPerguntas();
-
+sortear();
 perguntaAtual=0;
 pontuacao=0;
 mostrarPergunta();
 }
 
 function mostrarPergunta(){
+
 let p=perguntas[perguntaAtual];
+let progresso=((perguntaAtual)/perguntas.length)*100;
 
 let html="<div class='quiz-container'>";
 html+="<h2>🎯 Quiz Institucional</h2>";
+html+="<div class='progress-bar'><div class='progress' style='width:"+progresso+"%'></div></div>";
 html+="<p><strong>"+p.pergunta+"</strong></p>";
 
-p.opcoes.forEach((opcao,index)=>{
-html+="<button onclick='verificarResposta("+index+")'>"+opcao+"</button><br>";
+p.opcoes.forEach((op,i)=>{
+html+="<button onclick='verificar("+i+")' id='btn"+i+"'>"+op+"</button><br>";
 });
 
-html+="<div id='feedback' style='margin-top:15px;font-weight:bold;'></div>";
+html+="<div id='feedback' style='margin-top:10px;'></div>";
 html+="</div>";
 
 document.getElementById("gameContent").innerHTML=html;
 }
 
-function verificarResposta(indice){
+function verificar(i){
 
 let correta=perguntas[perguntaAtual].correta;
 let feedback=document.getElementById("feedback");
 
-if(indice===correta){
+if(i===correta){
 pontuacao++;
-feedback.innerHTML="✅ Correto! "+perguntas[perguntaAtual].explicacao;
+document.getElementById("btn"+i).classList.add("correct");
+feedback.innerHTML="✅ Correto! "+perguntas[perguntaAtual].exp;
 }else{
-feedback.innerHTML="❌ Incorreto. "+perguntas[perguntaAtual].explicacao;
+document.getElementById("btn"+i).classList.add("wrong");
+document.getElementById("btn"+correta).classList.add("correct");
+feedback.innerHTML="❌ Incorreto. "+perguntas[perguntaAtual].exp;
 }
 
 setTimeout(()=>{
@@ -194,18 +195,26 @@ perguntaAtual++;
 if(perguntaAtual<perguntas.length){
 mostrarPergunta();
 }else{
-mostrarResultado();
+resultadoFinal();
 }
 },1500);
 }
 
-function mostrarResultado(){
-let percentual=Math.round((pontuacao/perguntas.length)*100);
+function resultadoFinal(){
+
+let perc=Math.round((pontuacao/perguntas.length)*100);
+let classificacao="";
+let cor="";
+
+if(perc>=90){classificacao="🟢 Excelente – Multiplicador de Prevenção";cor="#4CAF50";}
+else if(perc>=70){classificacao="🔵 Bom – Consciente da Prevenção";cor="#2196F3";}
+else if(perc>=50){classificacao="🟡 Atenção – Reforçar Conhecimento";cor="#FFC107";}
+else{classificacao="🔴 Alerta – Necessita Orientação";cor="#e74c3c";}
 
 let html="<div class='quiz-container'>";
 html+="<h2>🏆 Resultado Final</h2>";
 html+="<p>Você acertou "+pontuacao+" de "+perguntas.length+" perguntas.</p>";
-html+="<p><strong>"+percentual+"% de aproveitamento</strong></p>";
+html+="<p class='resultado' style='color:"+cor+"'>"+classificacao+"</p>";
 html+="<button onclick='iniciarQuiz()'>🔄 Jogar Novamente</button>";
 html+="</div>";
 
