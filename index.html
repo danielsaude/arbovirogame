@@ -74,29 +74,32 @@ footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
 <footer>
 Vigilância em Saúde – Educação e Prevenção
 </footer>
-
 <script>
 
 let perguntas = [
 {
     pergunta: "Qual mosquito transmite Dengue, Zika e Chikungunya?",
     opcoes: ["Aedes aegypti", "Pernilongo comum", "Mosquito da malária"],
-    correta: 0
+    correta: 0,
+    explicacao: "O Aedes aegypti é o principal transmissor das arboviroses urbanas."
 },
 {
     pergunta: "Qual é a melhor forma de prevenir arboviroses?",
     opcoes: ["Eliminar água parada", "Tomar antibiótico", "Beber mais água"],
-    correta: 0
+    correta: 0,
+    explicacao: "Eliminar água parada impede a reprodução do mosquito."
 },
 {
     pergunta: "A dengue pode causar:",
     opcoes: ["Febre alta e dor no corpo", "Fratura óssea", "Cegueira imediata"],
-    correta: 0
+    correta: 0,
+    explicacao: "Os principais sintomas são febre alta, dor no corpo e atrás dos olhos."
 },
 {
     pergunta: "Agentes de Endemias atuam:",
     opcoes: ["Na prevenção e orientação", "Apenas em hospitais", "Somente em laboratório"],
-    correta: 0
+    correta: 0,
+    explicacao: "O trabalho é preventivo, educativo e domiciliar."
 }
 ];
 
@@ -112,16 +115,24 @@ function iniciarQuiz() {
 }
 
 function mostrarPergunta() {
-    let p = perguntas[perguntaAtual];
 
-    let html = `<div class="quiz-container">`;
-    html += `<h2>🎯 Quiz da Dengue</h2>`;
-    html += `<p><strong>${p.pergunta}</strong></p>`;
+    let p = perguntas[perguntaAtual];
+    let progresso = ((perguntaAtual) / perguntas.length) * 100;
+
+    let html = `
+    <div class="quiz-container">
+        <h2>🎯 Quiz Institucional</h2>
+        <div style="background:#ddd;border-radius:10px;margin-bottom:15px;">
+            <div style="height:15px;background:#ffd700;width:${progresso}%;border-radius:10px;"></div>
+        </div>
+        <p><strong>${p.pergunta}</strong></p>
+    `;
 
     p.opcoes.forEach((opcao, index) => {
-        html += `<button onclick="verificarResposta(${index})">${opcao}</button><br>`;
+        html += `<button onclick="verificarResposta(${index})" id="btn${index}">${opcao}</button><br>`;
     });
 
+    html += `<div id="feedback" style="margin-top:15px;font-weight:bold;"></div>`;
     html += `</div>`;
 
     document.getElementById("gameContent").innerHTML = html;
@@ -129,25 +140,41 @@ function mostrarPergunta() {
 
 function verificarResposta(indice) {
 
-    if (indice === perguntas[perguntaAtual].correta) {
+    let correta = perguntas[perguntaAtual].correta;
+    let feedback = document.getElementById("feedback");
+
+    if (indice === correta) {
         pontuacao++;
-    }
-
-    perguntaAtual++;
-
-    if (perguntaAtual < perguntas.length) {
-        mostrarPergunta();
+        feedback.innerHTML = "✅ Correto! " + perguntas[perguntaAtual].explicacao;
+        document.getElementById("btn"+indice).style.background = "#4CAF50";
     } else {
-        mostrarResultado();
+        feedback.innerHTML = "❌ Incorreto. " + perguntas[perguntaAtual].explicacao;
+        document.getElementById("btn"+indice).style.background = "#e74c3c";
+        document.getElementById("btn"+correta).style.background = "#4CAF50";
     }
+
+    setTimeout(() => {
+        perguntaAtual++;
+        if (perguntaAtual < perguntas.length) {
+            mostrarPergunta();
+        } else {
+            mostrarResultado();
+        }
+    }, 2000);
 }
 
 function mostrarResultado() {
-    let html = `<div class="quiz-container">`;
-    html += `<h2>🏆 Resultado Final</h2>`;
-    html += `<p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>`;
-    html += `<button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>`;
-    html += `</div>`;
+
+    let percentual = Math.round((pontuacao / perguntas.length) * 100);
+
+    let html = `
+    <div class="quiz-container">
+        <h2>🏆 Resultado Final</h2>
+        <p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>
+        <p><strong>Desempenho: ${percentual}%</strong></p>
+        <button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>
+    </div>
+    `;
 
     document.getElementById("gameContent").innerHTML = html;
 }
@@ -164,6 +191,12 @@ function mostrarMensagem(msg) {
 }
 
 </script>
+
+
+
+
+
+
 
 </body>
 </html>
