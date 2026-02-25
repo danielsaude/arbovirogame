@@ -84,9 +84,9 @@ font-weight:bold;
 </header>
 
 <div class="menu" id="menu">
-<button onclick="iniciarQuiz()">🎯 Quiz Institucional</button>
+<button onclick="iniciarQuiz()">🎯 Quiz</button>
 <button onclick="mostrarMensagem('❌⭕ Jogo da Prevenção em desenvolvimento')">❌⭕ Jogo da Prevenção</button>
-<button onclick="mostrarMensagem('🌀 Labirinto da Saúde em desenvolvimento')">🌀 Labirinto</button>
+<button onclick="mostrarMensagem('🌀 Labirinto da Saúde em desenvolvimento')">🌀 Labirinto da Saúde</button>
 <button onclick="mostrarMensagem('🔎 Caça-Palavras em desenvolvimento')">🔎 Caça-Palavras</button>
 <button onclick="mostrarMensagem('🧠 Jogo da Memória em desenvolvimento')">🧠 Jogo da Memória</button>
 </div>
@@ -102,19 +102,19 @@ Vigilância em Saúde – Educação e Prevenção
 
 <script>
 
-/* ================= BANCO COMPLETO ================= */
+/* ================= BANCO DE PERGUNTAS ================= */
 
 let bancoPerguntas=[
 {pergunta:"Qual mosquito transmite Dengue, Zika e Chikungunya?",opcoes:["Aedes aegypti","Pernilongo comum","Mosquito da malária"],correta:0,exp:"É o principal vetor urbano."},
-{pergunta:"O mosquito deposita ovos em:",opcoes:["Água parada","Água corrente","Solo seco"],correta:0,exp:"Prefere água parada limpa."},
-{pergunta:"Sintoma comum da dengue:",opcoes:["Febre alta","Unha quebradiça","Coceira leve"],correta:0,exp:"Febre alta e dor no corpo são comuns."},
-{pergunta:"Eliminar água parada:",opcoes:["Impede reprodução","Substitui vacina","Mata vírus no ar"],correta:0,exp:"Sem água parada não há ciclo reprodutivo."},
+{pergunta:"O mosquito deposita ovos em:",opcoes:["Água parada limpa","Água corrente","Solo seco"],correta:0,exp:"Prefere água parada limpa."},
+{pergunta:"Sintoma comum da dengue:",opcoes:["Febre alta e dor no corpo","Unha quebradiça","Coceira leve"],correta:0,exp:"Febre e dores são sintomas frequentes."},
+{pergunta:"Eliminar água parada:",opcoes:["Impede reprodução do mosquito","Substitui vacina","Mata vírus no ar"],correta:0,exp:"Sem água parada não há reprodução."},
 {pergunta:"Caixa d'água deve estar:",opcoes:["Bem tampada","Destampada","Com furos"],correta:0,exp:"A tampa impede postura de ovos."},
-{pergunta:"O Aedes pica mais:",opcoes:["Durante o dia","Só à noite","No inverno"],correta:0,exp:"É mais ativo durante o dia."},
-{pergunta:"Pratos de plantas devem ter:",opcoes:["Areia até borda","Água acumulada","Nada"],correta:0,exp:"Areia evita água parada."},
-{pergunta:"Garrafas devem ficar:",opcoes:["Viradas para baixo","Cheias de água","Destampadas"],correta:0,exp:"Evita acúmulo de água."},
-{pergunta:"Prevenção depende:",opcoes:["Da comunidade","Só hospital","Só vacina"],correta:0,exp:"É responsabilidade coletiva."},
-{pergunta:"Agentes de Endemias atuam:",opcoes:["Na prevenção","Só hospital","Só laboratório"],correta:0,exp:"Trabalho educativo e domiciliar."}
+{pergunta:"O Aedes costuma picar mais:",opcoes:["Durante o dia","Apenas à noite","Somente no inverno"],correta:0,exp:"É mais ativo durante o dia."},
+{pergunta:"Pratos de plantas devem ter:",opcoes:["Areia até a borda","Água acumulada","Nada"],correta:0,exp:"A areia impede acúmulo de água."},
+{pergunta:"Garrafas devem ficar:",opcoes:["Viradas para baixo","Cheias de água","Destampadas"],correta:0,exp:"Evita água parada."},
+{pergunta:"A prevenção depende:",opcoes:["Da participação da comunidade","Só hospital","Só vacina"],correta:0,exp:"A prevenção é responsabilidade coletiva."},
+{pergunta:"Agentes de Endemias atuam:",opcoes:["Na prevenção e orientação","Somente em hospital","Apenas em laboratório"],correta:0,exp:"O trabalho é educativo e domiciliar."}
 ];
 
 /* ================= VARIÁVEIS ================= */
@@ -161,7 +161,7 @@ let p=perguntas[perguntaAtual];
 let progresso=((perguntaAtual)/perguntas.length)*100;
 
 let html="<div class='quiz-container'>";
-html+="<h2>🎯 Quiz Institucional</h2>";
+html+="<h2>🎯 Quiz</h2>";
 html+="<div class='progress-bar'><div class='progress' style='width:"+progresso+"%'></div></div>";
 html+="<p><strong>"+p.pergunta+"</strong></p>";
 
