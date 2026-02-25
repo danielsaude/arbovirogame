@@ -14,14 +14,7 @@ color:white;
 text-align:center;
 }
 
-header{
-padding:25px;
-}
-
-.subtitle{
-opacity:.9;
-font-size:15px;
-}
+header{padding:20px;}
 
 .menu{
 display:flex;
@@ -48,10 +41,7 @@ transform:scale(1.05);
 
 .hidden{display:none;}
 
-.game-area{
-margin-top:20px;
-padding:20px;
-}
+.game-area{margin-top:20px;padding:20px;}
 
 .quiz-container{
 max-width:650px;
@@ -71,34 +61,24 @@ cursor:pointer;
 background:white;
 color:#1f3c88;
 font-weight:bold;
-transition:.3s;
-}
-
-button:hover{background:#ffd700;}
-
-.progress-bar{
-width:100%;
-background:#ddd;
-border-radius:10px;
-margin-bottom:15px;
-}
-
-.progress{
-height:15px;
-background:#ffd700;
-border-radius:10px;
-width:0%;
-transition:.4s;
 }
 
 .correct{background:#4CAF50!important;color:white;}
 .wrong{background:#e74c3c!important;color:white;}
 
-footer{
-margin-top:40px;
-font-size:14px;
-opacity:.8;
-padding-bottom:20px;
+input{
+padding:8px;
+margin:5px;
+border-radius:8px;
+border:none;
+}
+
+.ranking{
+background:rgba(0,0,0,0.3);
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+text-align:left;
 }
 </style>
 </head>
@@ -107,46 +87,38 @@ padding-bottom:20px;
 
 <header>
 <h1>🦟 ArboviroGame</h1>
-<div class="subtitle">Missão Contra as Arboviroses</div>
-<div class="subtitle">Educação em Saúde – Prevenção que Protege</div>
+<p>Missão Contra as Arboviroses</p>
 </header>
 
 <div class="menu" id="menu">
 <div class="card" onclick="iniciarQuiz()">🎯<br><strong>Quiz</strong></div>
-<div class="card" onclick="mostrarMensagem('❌⭕ Jogo da Prevenção em desenvolvimento')">❌⭕<br><strong>Jogo da Prevenção</strong></div>
-<div class="card" onclick="mostrarMensagem('🌀 Labirinto da Saúde em desenvolvimento')">🌀<br><strong>Labirinto</strong></div>
-<div class="card" onclick="mostrarMensagem('🔎 Caça-Palavras em desenvolvimento')">🔎<br><strong>Caça-Palavras</strong></div>
-<div class="card" onclick="mostrarMensagem('🧠 Jogo da Memória em desenvolvimento')">🧠<br><strong>Jogo da Memória</strong></div>
+<div class="card" onclick="mostrarRanking()">🏆<br><strong>Ranking</strong></div>
 </div>
 
 <div class="game-area hidden" id="gameArea">
-<button onclick="voltarMenu()">⬅ Voltar ao Menu</button>
+<button onclick="voltarMenu()">⬅ Voltar</button>
 <div id="gameContent"></div>
 </div>
-
-<footer>
-Vigilância em Saúde – Educação e Prevenção
-</footer>
 
 <script>
 
 /* ===== BANCO ===== */
 
 let bancoPerguntas=[
-{pergunta:"Qual mosquito transmite Dengue, Zika e Chikungunya?",opcoes:["Aedes aegypti","Pernilongo comum","Mosquito da malária"],correta:0,exp:"É o principal vetor urbano."},
-{pergunta:"Onde o mosquito deposita ovos?",opcoes:["Água parada limpa","Água corrente","Solo seco"],correta:0,exp:"Prefere água parada limpa."},
-{pergunta:"Sintoma comum da dengue:",opcoes:["Febre alta","Unha quebradiça","Coceira leve"],correta:0,exp:"Febre alta é sintoma comum."},
-{pergunta:"Eliminar água parada:",opcoes:["Impede reprodução","Substitui vacina","Mata vírus no ar"],correta:0,exp:"Sem água parada não há reprodução."},
-{pergunta:"Caixa d'água deve estar:",opcoes:["Bem tampada","Destampada","Com furos"],correta:0,exp:"A tampa impede postura de ovos."},
-{pergunta:"O Aedes pica mais:",opcoes:["Durante o dia","Só à noite","No inverno"],correta:0,exp:"É mais ativo durante o dia."},
-{pergunta:"Prevenção depende:",opcoes:["Da comunidade","Só hospital","Só vacina"],correta:0,exp:"É responsabilidade coletiva."}
+{pergunta:"Qual mosquito transmite Dengue, Zika e Chikungunya?",opcoes:["Aedes aegypti","Pernilongo comum","Mosquito da malária"],correta:0},
+{pergunta:"Onde o mosquito deposita ovos?",opcoes:["Água parada limpa","Água corrente","Solo seco"],correta:0},
+{pergunta:"Sintoma comum da dengue:",opcoes:["Febre alta","Unha quebradiça","Coceira leve"],correta:0},
+{pergunta:"Eliminar água parada:",opcoes:["Impede reprodução","Substitui vacina","Mata vírus no ar"],correta:0},
+{pergunta:"Caixa d'água deve estar:",opcoes:["Bem tampada","Destampada","Com furos"],correta:0},
+{pergunta:"O Aedes pica mais:",opcoes:["Durante o dia","Só à noite","No inverno"],correta:0},
+{pergunta:"Prevenção depende:",opcoes:["Da comunidade","Só hospital","Só vacina"],correta:0}
 ];
-
-/* ===== VARIÁVEIS ===== */
 
 let perguntas=[];
 let perguntaAtual=0;
 let pontuacao=0;
+let nomeAluno="";
+let turmaAluno="";
 
 /* ===== MENU ===== */
 
@@ -156,24 +128,33 @@ document.getElementById("gameArea").classList.add("hidden");
 document.getElementById("gameContent").innerHTML="";
 }
 
-function mostrarMensagem(msg){
-document.getElementById("menu").classList.add("hidden");
-document.getElementById("gameArea").classList.remove("hidden");
-document.getElementById("gameContent").innerHTML="<h2>"+msg+"</h2>";
-}
-
-/* ===== QUIZ ===== */
-
-function sortear(){
-let copia=[...bancoPerguntas];
-copia.sort(()=>0.5-Math.random());
-perguntas=copia.slice(0,5);
-}
-
 function iniciarQuiz(){
 document.getElementById("menu").classList.add("hidden");
 document.getElementById("gameArea").classList.remove("hidden");
-sortear();
+
+document.getElementById("gameContent").innerHTML=`
+<div class="quiz-container">
+<h2>Identificação</h2>
+<input type="text" id="nome" placeholder="Nome do aluno"><br>
+<input type="text" id="turma" placeholder="Turma"><br>
+<button onclick="comecar()">Iniciar Quiz</button>
+</div>
+`;
+}
+
+function comecar(){
+nomeAluno=document.getElementById("nome").value;
+turmaAluno=document.getElementById("turma").value;
+
+if(nomeAluno===""||turmaAluno===""){
+alert("Preencha nome e turma");
+return;
+}
+
+let copia=[...bancoPerguntas];
+copia.sort(()=>0.5-Math.random());
+perguntas=copia.slice(0,5);
+
 perguntaAtual=0;
 pontuacao=0;
 mostrarPergunta();
@@ -181,58 +162,75 @@ mostrarPergunta();
 
 function mostrarPergunta(){
 let p=perguntas[perguntaAtual];
-let progresso=((perguntaAtual)/perguntas.length)*100;
 
 let html="<div class='quiz-container'>";
 html+="<h2>🎯 Quiz</h2>";
-html+="<div class='progress-bar'><div class='progress' style='width:"+progresso+"%'></div></div>";
 html+="<p><strong>"+p.pergunta+"</strong></p>";
 
 p.opcoes.forEach((op,i)=>{
 html+="<button onclick='verificar("+i+")' id='btn"+i+"'>"+op+"</button><br>";
 });
 
-html+="<div id='feedback'></div>";
 html+="</div>";
 
 document.getElementById("gameContent").innerHTML=html;
 }
 
 function verificar(i){
-let correta=perguntas[perguntaAtual].correta;
-let feedback=document.getElementById("feedback");
-
-if(i===correta){
+if(i===perguntas[perguntaAtual].correta){
 pontuacao++;
-document.getElementById("btn"+i).classList.add("correct");
-feedback.innerHTML="✅ Correto! "+perguntas[perguntaAtual].exp;
-}else{
-document.getElementById("btn"+i).classList.add("wrong");
-document.getElementById("btn"+correta).classList.add("correct");
-feedback.innerHTML="❌ Incorreto. "+perguntas[perguntaAtual].exp;
 }
 
-setTimeout(()=>{
 perguntaAtual++;
+
 if(perguntaAtual<perguntas.length){
 mostrarPergunta();
 }else{
-resultadoFinal();
+finalizar();
 }
-},1500);
 }
 
-function resultadoFinal(){
-let perc=Math.round((pontuacao/perguntas.length)*100);
+function finalizar(){
+let score=Math.round((pontuacao/perguntas.length)*100);
 
-let html="<div class='quiz-container'>";
-html+="<h2>🏆 Resultado Final</h2>";
-html+="<p>"+pontuacao+" de "+perguntas.length+" acertos</p>";
-html+="<p><strong>"+perc+"% de aproveitamento</strong></p>";
-html+="<button onclick='iniciarQuiz()'>🔄 Jogar Novamente</button>";
+let ranking=JSON.parse(localStorage.getItem("ranking"))||[];
+ranking.push({nome:nomeAluno,turma:turmaAluno,pontos:score});
+ranking.sort((a,b)=>b.pontos-a.pontos);
+localStorage.setItem("ranking",JSON.stringify(ranking));
+
+document.getElementById("gameContent").innerHTML=`
+<div class="quiz-container">
+<h2>Resultado</h2>
+<p>${nomeAluno} - ${score}%</p>
+<button onclick="iniciarQuiz()">Jogar novamente</button>
+<button onclick="mostrarRanking()">Ver Ranking</button>
+</div>
+`;
+}
+
+function mostrarRanking(){
+document.getElementById("menu").classList.add("hidden");
+document.getElementById("gameArea").classList.remove("hidden");
+
+let ranking=JSON.parse(localStorage.getItem("ranking"))||[];
+
+let html="<div class='quiz-container'><h2>🏆 Ranking Geral</h2>";
+html+="<div class='ranking'>";
+
+ranking.slice(0,10).forEach((r,i)=>{
+html+=`${i+1}. ${r.nome} - ${r.turma} - ${r.pontos}%<br>`;
+});
+
+html+="</div>";
+html+="<button onclick='limparRanking()'>Limpar Ranking</button>";
 html+="</div>";
 
 document.getElementById("gameContent").innerHTML=html;
+}
+
+function limparRanking(){
+localStorage.removeItem("ranking");
+mostrarRanking();
 }
 
 </script>
