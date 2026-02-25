@@ -166,28 +166,39 @@ function verificarResposta(indice) {
 function mostrarResultado() {
 
     let percentual = Math.round((pontuacao / perguntas.length) * 100);
+    let classificacao = "";
+    let cor = "";
+
+    if (percentual >= 90) {
+        classificacao = "🟢 Excelente – Agente Multiplicador de Prevenção";
+        cor = "#4CAF50";
+    } 
+    else if (percentual >= 70) {
+        classificacao = "🔵 Bom – Consciente da Prevenção";
+        cor = "#2196F3";
+    } 
+    else if (percentual >= 50) {
+        classificacao = "🟡 Atenção – Precisa Reforçar Conhecimentos";
+        cor = "#FFC107";
+    } 
+    else {
+        classificacao = "🔴 Alerta – Necessita Orientação Educativa";
+        cor = "#e74c3c";
+    }
 
     let html = `
     <div class="quiz-container">
         <h2>🏆 Resultado Final</h2>
         <p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>
         <p><strong>Desempenho: ${percentual}%</strong></p>
+        <p style="color:${cor}; font-size:18px; font-weight:bold;">
+            ${classificacao}
+        </p>
         <button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>
     </div>
     `;
 
     document.getElementById("gameContent").innerHTML = html;
-}
-
-function voltarMenu() {
-    document.getElementById("menu").classList.remove("hidden");
-    document.getElementById("gameArea").classList.add("hidden");
-}
-
-function mostrarMensagem(msg) {
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("gameArea").classList.remove("hidden");
-    document.getElementById("gameContent").innerHTML = `<h2>${msg}</h2>`;
 }
 
 </script>
