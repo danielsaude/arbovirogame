@@ -13,13 +13,9 @@ body {
     background: linear-gradient(135deg, #0f9b8e, #1f3c88);
     color: white;
 }
-
 header { padding: 20px; }
-
 .subtitle { font-size: 16px; opacity: 0.9; }
-
 .menu { margin-top: 30px; }
-
 button {
     padding: 15px 25px;
     margin: 10px;
@@ -32,15 +28,10 @@ button {
     font-weight: bold;
     transition: 0.3s;
 }
-
 button:hover { background-color: #ffd700; }
-
 .hidden { display: none; }
-
 .game-area { margin-top: 30px; }
-
 footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
-
 .quiz-container {
     max-width: 600px;
     margin: auto;
@@ -61,9 +52,6 @@ footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
 
 <div class="menu" id="menu">
     <button onclick="iniciarQuiz()">🎯 Quiz da Dengue</button>
-    <button onclick="mostrarMensagem('Jogo da Prevenção em desenvolvimento')">❌⭕ Jogo da Prevenção</button>
-    <button onclick="mostrarMensagem('Caça-Palavras em desenvolvimento')">🔎 Caça-Palavras</button>
-    <button onclick="mostrarMensagem('Labirinto da Saúde em desenvolvimento')">🌀 Labirinto</button>
 </div>
 
 <div class="game-area hidden" id="gameArea">
@@ -74,125 +62,67 @@ footer { margin-top: 40px; font-size: 14px; opacity: 0.8; }
 <footer>
 Vigilância em Saúde – Educação e Prevenção
 </footer>
+
 <script>
 
-// =============================
 // BANCO DE PERGUNTAS
-// =============================
-
 let bancoPerguntas = [
-
 {
 pergunta: "Qual mosquito transmite Dengue, Zika e Chikungunya?",
 opcoes: ["Aedes aegypti", "Pernilongo comum", "Mosquito da malária"],
 correta: 0,
 explicacao: "O Aedes aegypti é o principal transmissor urbano dessas arboviroses."
 },
-
 {
 pergunta: "Onde o mosquito deposita seus ovos?",
 opcoes: ["Água parada limpa", "Água corrente de rio", "Solo seco"],
 correta: 0,
-explicacao: "O Aedes aegypti prefere água parada limpa para reprodução."
+explicacao: "Prefere água parada limpa."
 },
-
 {
 pergunta: "Qual sintoma é comum na dengue?",
 opcoes: ["Febre alta e dor no corpo", "Queda de cabelo", "Coceira nos pés"],
 correta: 0,
-explicacao: "Febre alta e dores intensas são sintomas frequentes."
+explicacao: "Febre alta e dores são sintomas frequentes."
 },
-
 {
 pergunta: "Eliminar água parada ajuda porque:",
 opcoes: ["Impede a reprodução do mosquito", "Mata vírus no ar", "Substitui vacina"],
 correta: 0,
-explicacao: "Sem água parada o mosquito não consegue se reproduzir."
+explicacao: "Sem água parada o mosquito não se reproduz."
 },
-
 {
-pergunta: "Caixas d'água devem estar:",
-opcoes: ["Bem tampadas", "Destampadas", "Com buracos"],
-correta: 0,
-explicacao: "A tampa impede que o mosquito deposite ovos."
-},
-
-{
-pergunta: "O mosquito Aedes costuma picar mais:",
-opcoes: ["Durante o dia", "Apenas à noite", "Somente no inverno"],
-correta: 0,
-explicacao: "Ele é mais ativo durante o dia."
-},
-
-{
-pergunta: "Agentes de Endemias atuam principalmente:",
-opcoes: ["Na prevenção e orientação", "Somente em hospitais", "Apenas na internet"],
-correta: 0,
-explicacao: "O trabalho é educativo, preventivo e domiciliar."
-},
-
-{
-pergunta: "Garrafas devem ser guardadas:",
-opcoes: ["Viradas para baixo", "Com água dentro", "Destampadas"],
-correta: 0,
-explicacao: "Evita acúmulo de água parada."
-},
-
-{
-pergunta: "Pratos de plantas devem ter:",
-opcoes: ["Areia até a borda", "Água acumulada", "Nada"],
-correta: 0,
-explicacao: "A areia impede acúmulo de água."
-},
-
-{
-pergunta: "A prevenção das arboviroses depende:",
-opcoes: ["Da participação da comunidade", "Apenas do hospital", "Somente da vacina"],
+pergunta: "A prevenção depende:",
+opcoes: ["Da participação da comunidade", "Só do hospital", "Só da vacina"],
 correta: 0,
 explicacao: "A prevenção é responsabilidade coletiva."
 }
-
 ];
 
-// =============================
-// VARIÁVEIS DO QUIZ
-// =============================
-
+// VARIÁVEIS
 let perguntas = [];
 let perguntaAtual = 0;
 let pontuacao = 0;
 
-// =============================
-// SORTEIO DE PERGUNTAS
-// =============================
-
+// SORTEAR
 function sortearPerguntas(qtd = 5) {
     let copia = [...bancoPerguntas];
     copia.sort(() => 0.5 - Math.random());
     perguntas = copia.slice(0, qtd);
 }
 
-// =============================
-// INICIAR QUIZ
-// =============================
-
+// INICIAR
 function iniciarQuiz() {
     document.getElementById("menu").classList.add("hidden");
     document.getElementById("gameArea").classList.remove("hidden");
-
     sortearPerguntas(5);
-
     perguntaAtual = 0;
     pontuacao = 0;
     mostrarPergunta();
 }
 
-// =============================
-// MOSTRAR PERGUNTA
-// =============================
-
+// MOSTRAR
 function mostrarPergunta() {
-
     let p = perguntas[perguntaAtual];
     let progresso = ((perguntaAtual) / perguntas.length) * 100;
 
@@ -206,7 +136,7 @@ function mostrarPergunta() {
     `;
 
     p.opcoes.forEach((opcao, index) => {
-        html += `<button onclick="verificarResposta(${index})" id="btn${index}">${opcao}</button><br>`;
+        html += `<button onclick="verificarResposta(${index})">${opcao}</button><br>`;
     });
 
     html += `<div id="feedback" style="margin-top:15px;font-weight:bold;"></div>`;
@@ -215,23 +145,16 @@ function mostrarPergunta() {
     document.getElementById("gameContent").innerHTML = html;
 }
 
-// =============================
-// VERIFICAR RESPOSTA
-// =============================
-
+// VERIFICAR
 function verificarResposta(indice) {
-
     let correta = perguntas[perguntaAtual].correta;
     let feedback = document.getElementById("feedback");
 
     if (indice === correta) {
         pontuacao++;
         feedback.innerHTML = "✅ Correto! " + perguntas[perguntaAtual].explicacao;
-        document.getElementById("btn"+indice).style.background = "#4CAF50";
     } else {
         feedback.innerHTML = "❌ Incorreto. " + perguntas[perguntaAtual].explicacao;
-        document.getElementById("btn"+indice).style.background = "#e74c3c";
-        document.getElementById("btn"+correta).style.background = "#4CAF50";
     }
 
     setTimeout(() => {
@@ -241,44 +164,18 @@ function verificarResposta(indice) {
         } else {
             mostrarResultado();
         }
-    }, 2000);
+    }, 1500);
 }
 
-// =============================
-// RESULTADO FINAL
-// =============================
-
+// RESULTADO
 function mostrarResultado() {
-
     let percentual = Math.round((pontuacao / perguntas.length) * 100);
-    let classificacao = "";
-    let cor = "";
-
-    if (percentual >= 90) {
-        classificacao = "🟢 Excelente – Agente Multiplicador de Prevenção";
-        cor = "#4CAF50";
-    } 
-    else if (percentual >= 70) {
-        classificacao = "🔵 Bom – Consciente da Prevenção";
-        cor = "#2196F3";
-    } 
-    else if (percentual >= 50) {
-        classificacao = "🟡 Atenção – Precisa Reforçar Conhecimentos";
-        cor = "#FFC107";
-    } 
-    else {
-        classificacao = "🔴 Alerta – Necessita Orientação Educativa";
-        cor = "#e74c3c";
-    }
 
     let html = `
     <div class="quiz-container">
         <h2>🏆 Resultado Final</h2>
         <p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>
         <p><strong>Desempenho: ${percentual}%</strong></p>
-        <p style="color:${cor}; font-size:18px; font-weight:bold;">
-            ${classificacao}
-        </p>
         <button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>
     </div>
     `;
@@ -286,129 +183,20 @@ function mostrarResultado() {
     document.getElementById("gameContent").innerHTML = html;
 }
 
-// =============================
-// VOLTAR AO MENU
-// =============================
-
+// VOLTAR
 function voltarMenu() {
     document.getElementById("menu").classList.remove("hidden");
     document.getElementById("gameArea").classList.add("hidden");
 }
 
-function mostrarMensagem(msg) {
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("gameArea").classList.remove("hidden");
-    document.getElementById("gameContent").innerHTML = `<h2>${msg}</h2>`;
-}
-
 </script>
-
-
-let perguntaAtual = 0;
-let pontuacao = 0;
-
-function iniciarQuiz() {
-    document.getElementById("menu").classList.add("hidden");
-    document.getElementById("gameArea").classList.remove("hidden");
-    perguntaAtual = 0;
-    pontuacao = 0;
-    mostrarPergunta();
-}
-
-function mostrarPergunta() {
-
-    let p = perguntas[perguntaAtual];
-    let progresso = ((perguntaAtual) / perguntas.length) * 100;
-
-    let html = `
-    <div class="quiz-container">
-        <h2>🎯 Quiz Institucional</h2>
-        <div style="background:#ddd;border-radius:10px;margin-bottom:15px;">
-            <div style="height:15px;background:#ffd700;width:${progresso}%;border-radius:10px;"></div>
-        </div>
-        <p><strong>${p.pergunta}</strong></p>
-    `;
-
-    p.opcoes.forEach((opcao, index) => {
-        html += `<button onclick="verificarResposta(${index})" id="btn${index}">${opcao}</button><br>`;
-    });
-
-    html += `<div id="feedback" style="margin-top:15px;font-weight:bold;"></div>`;
-    html += `</div>`;
-
-    document.getElementById("gameContent").innerHTML = html;
-}
-
-function verificarResposta(indice) {
-
-    let correta = perguntas[perguntaAtual].correta;
-    let feedback = document.getElementById("feedback");
-
-    if (indice === correta) {
-        pontuacao++;
-        feedback.innerHTML = "✅ Correto! " + perguntas[perguntaAtual].explicacao;
-        document.getElementById("btn"+indice).style.background = "#4CAF50";
-    } else {
-        feedback.innerHTML = "❌ Incorreto. " + perguntas[perguntaAtual].explicacao;
-        document.getElementById("btn"+indice).style.background = "#e74c3c";
-        document.getElementById("btn"+correta).style.background = "#4CAF50";
-    }
-
-    setTimeout(() => {
-        perguntaAtual++;
-        if (perguntaAtual < perguntas.length) {
-            mostrarPergunta();
-        } else {
-            mostrarResultado();
-        }
-    }, 2000);
-}
-
-function mostrarResultado() {
-
-    let percentual = Math.round((pontuacao / perguntas.length) * 100);
-    let classificacao = "";
-    let cor = "";
-
-    if (percentual >= 90) {
-        classificacao = "🟢 Excelente – Agente Multiplicador de Prevenção";
-        cor = "#4CAF50";
-    } 
-    else if (percentual >= 70) {
-        classificacao = "🔵 Bom – Consciente da Prevenção";
-        cor = "#2196F3";
-    } 
-    else if (percentual >= 50) {
-        classificacao = "🟡 Atenção – Precisa Reforçar Conhecimentos";
-        cor = "#FFC107";
-    } 
-    else {
-        classificacao = "🔴 Alerta – Necessita Orientação Educativa";
-        cor = "#e74c3c";
-    }
-
-    let html = `
-    <div class="quiz-container">
-        <h2>🏆 Resultado Final</h2>
-        <p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>
-        <p><strong>Desempenho: ${percentual}%</strong></p>
-        <p style="color:${cor}; font-size:18px; font-weight:bold;">
-            ${classificacao}
-        </p>
-        <button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>
-    </div>
-    `;
-
-    document.getElementById("gameContent").innerHTML = html;
-}
-
-</script>
-
-
-
-
-
-
 
 </body>
 </html>
+
+
+
+
+
+
+
