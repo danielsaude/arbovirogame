@@ -76,6 +76,10 @@ Vigilância em Saúde – Educação e Prevenção
 </footer>
 <script>
 
+// =============================
+// BANCO DE PERGUNTAS
+// =============================
+
 let bancoPerguntas = [
 
 {
@@ -149,6 +153,156 @@ explicacao: "A prevenção é responsabilidade coletiva."
 }
 
 ];
+
+// =============================
+// VARIÁVEIS DO QUIZ
+// =============================
+
+let perguntas = [];
+let perguntaAtual = 0;
+let pontuacao = 0;
+
+// =============================
+// SORTEIO DE PERGUNTAS
+// =============================
+
+function sortearPerguntas(qtd = 5) {
+    let copia = [...bancoPerguntas];
+    copia.sort(() => 0.5 - Math.random());
+    perguntas = copia.slice(0, qtd);
+}
+
+// =============================
+// INICIAR QUIZ
+// =============================
+
+function iniciarQuiz() {
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("gameArea").classList.remove("hidden");
+
+    sortearPerguntas(5);
+
+    perguntaAtual = 0;
+    pontuacao = 0;
+    mostrarPergunta();
+}
+
+// =============================
+// MOSTRAR PERGUNTA
+// =============================
+
+function mostrarPergunta() {
+
+    let p = perguntas[perguntaAtual];
+    let progresso = ((perguntaAtual) / perguntas.length) * 100;
+
+    let html = `
+    <div class="quiz-container">
+        <h2>🎯 Quiz Institucional</h2>
+        <div style="background:#ddd;border-radius:10px;margin-bottom:15px;">
+            <div style="height:15px;background:#ffd700;width:${progresso}%;border-radius:10px;"></div>
+        </div>
+        <p><strong>${p.pergunta}</strong></p>
+    `;
+
+    p.opcoes.forEach((opcao, index) => {
+        html += `<button onclick="verificarResposta(${index})" id="btn${index}">${opcao}</button><br>`;
+    });
+
+    html += `<div id="feedback" style="margin-top:15px;font-weight:bold;"></div>`;
+    html += `</div>`;
+
+    document.getElementById("gameContent").innerHTML = html;
+}
+
+// =============================
+// VERIFICAR RESPOSTA
+// =============================
+
+function verificarResposta(indice) {
+
+    let correta = perguntas[perguntaAtual].correta;
+    let feedback = document.getElementById("feedback");
+
+    if (indice === correta) {
+        pontuacao++;
+        feedback.innerHTML = "✅ Correto! " + perguntas[perguntaAtual].explicacao;
+        document.getElementById("btn"+indice).style.background = "#4CAF50";
+    } else {
+        feedback.innerHTML = "❌ Incorreto. " + perguntas[perguntaAtual].explicacao;
+        document.getElementById("btn"+indice).style.background = "#e74c3c";
+        document.getElementById("btn"+correta).style.background = "#4CAF50";
+    }
+
+    setTimeout(() => {
+        perguntaAtual++;
+        if (perguntaAtual < perguntas.length) {
+            mostrarPergunta();
+        } else {
+            mostrarResultado();
+        }
+    }, 2000);
+}
+
+// =============================
+// RESULTADO FINAL
+// =============================
+
+function mostrarResultado() {
+
+    let percentual = Math.round((pontuacao / perguntas.length) * 100);
+    let classificacao = "";
+    let cor = "";
+
+    if (percentual >= 90) {
+        classificacao = "🟢 Excelente – Agente Multiplicador de Prevenção";
+        cor = "#4CAF50";
+    } 
+    else if (percentual >= 70) {
+        classificacao = "🔵 Bom – Consciente da Prevenção";
+        cor = "#2196F3";
+    } 
+    else if (percentual >= 50) {
+        classificacao = "🟡 Atenção – Precisa Reforçar Conhecimentos";
+        cor = "#FFC107";
+    } 
+    else {
+        classificacao = "🔴 Alerta – Necessita Orientação Educativa";
+        cor = "#e74c3c";
+    }
+
+    let html = `
+    <div class="quiz-container">
+        <h2>🏆 Resultado Final</h2>
+        <p>Você acertou ${pontuacao} de ${perguntas.length} perguntas.</p>
+        <p><strong>Desempenho: ${percentual}%</strong></p>
+        <p style="color:${cor}; font-size:18px; font-weight:bold;">
+            ${classificacao}
+        </p>
+        <button onclick="iniciarQuiz()">🔄 Jogar Novamente</button>
+    </div>
+    `;
+
+    document.getElementById("gameContent").innerHTML = html;
+}
+
+// =============================
+// VOLTAR AO MENU
+// =============================
+
+function voltarMenu() {
+    document.getElementById("menu").classList.remove("hidden");
+    document.getElementById("gameArea").classList.add("hidden");
+}
+
+function mostrarMensagem(msg) {
+    document.getElementById("menu").classList.add("hidden");
+    document.getElementById("gameArea").classList.remove("hidden");
+    document.getElementById("gameContent").innerHTML = `<h2>${msg}</h2>`;
+}
+
+</script>
+
 
 let perguntaAtual = 0;
 let pontuacao = 0;
